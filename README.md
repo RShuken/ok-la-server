@@ -1,1 +1,1 @@
-# Spaced repetition API!
+# Ok Language Learning Server

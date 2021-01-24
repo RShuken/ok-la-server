@@ -12,7 +12,7 @@ const LanguageService = {
         'language.total_score'
       )
       .where('language.user_id', user_id)
-      .first();
+      .returning('*');
   },
   getLanguages(db) {
     return db
@@ -23,10 +23,63 @@ const LanguageService = {
         'language.user_id',
         'language.head',
         'language.total_score'
-    )
-    .returning('*')
+      )
+      .returning('*');
   },
+  deleteWord(db, wordId) {
+    return db.from('word').where({ id: wordId }).del();
+  },
+  updateWord(db, wordId, updateObject) {
+    return db.from('word').where({ id: wordId }).update(updateObject);
+  },
+  addNewWord: async (db, languageId, newWord) => {
+    const [lastNext] = await db
+      .from('word')
+      .where({ language_id: languageId, next: null });
 
+    const [maxNext] = await db
+      .from('word')
+      .where({ language_id: languageId })
+      .max('next');
+
+    const newWordObject = {
+      original: newWord.original,
+      translation: newWord.translation,
+      memory_value: 1,
+      correct_count: 0,
+      incorrect_count: 0,
+      language_id: languageId,
+      next: null,
+    };
+
+    const insertNewWord = await db
+      .insert(newWordObject)
+      .into('word')
+      .returning('*')
+      .then(([word]) => word);
+
+    console.log(
+      'this is the value of lastNext and MaxNext and oldWordObject and NewWordObject and now insertNewWord',
+      //lastNext
+      //maxNext,
+      //oldWordObject,
+      // newWordObject,
+      insertNewWord,
+    );
+
+    const seq = await db.from('word_id_seq').select('last_value').first();
+    console.log('this is the seq value', seq);
+    const oldWordObject = {
+      next: seq.last_value,
+    };
+
+    const UpdateOldWordNextValue = await db
+      .from('word')
+      .where({ id: lastNext.id })
+      .update(oldWordObject);
+
+    return insertNewWord;
+  },
   getLanguageWords(db, language_id) {
     return db
       .from('word')
@@ -123,4 +176,4 @@ const LanguageService = {
   },
 };
 
-module.exports = LanguageService
+module.exports = LanguageService;

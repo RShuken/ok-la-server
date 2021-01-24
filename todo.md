@@ -7,19 +7,19 @@
 
 # Endpoints that are needed: 
 
-# Location: CommunityDeck.js
+# Location: CommunityDeck.js  DONE
 Action: On community deck page, a user adds a new deck from community decks into a users personal decks.
 `/language` POST request - it needs to add a new row to the language table with the user ID and the ID of the language
 Needs: user ID, and language ID passed. 
 Returns: 
 
-# Location: CommunityDecksDashboard.js
+# Location: CommunityDecksDashboard.js DONE
 Action: when the page loads a request needs to grab all community decks (currently that is all decks, I could add a is_public boolean colum later).
 Fetch: `/language` GET request
 Needs: Nothing
 Returns: an Array of languages with { name, total_score } (it would be nice to somehow populate an emoji flag of the language or some image)
 
-# Location: LanguageCard.js
+# Location: LanguageCard.js 
 Action: when the user clicks Delete card
 Fetch:  `/word/:id` DELETE request
 Needs: the id of the word card to be present

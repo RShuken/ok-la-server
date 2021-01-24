@@ -3,6 +3,7 @@ const LanguageService = require('./language-service');
 const { requireAuth } = require('../middleware/jwt-auth');
 const { LinkedList, toArray, _Node } = require('../linkedList');
 const bodyParser = express.json();
+
 const languageRouter = express.Router();
 
 languageRouter.use(requireAuth).use(async (req, res, next) => {
@@ -24,6 +25,7 @@ languageRouter.use(requireAuth).use(async (req, res, next) => {
   }
 });
 
+// Question, does this return all of the languages for a user or just one?
 languageRouter.get('/user', async (req, res, next) => {
   try {
     const words = await LanguageService.getLanguageWords(
@@ -57,7 +59,19 @@ languageRouter.get('/', async (req, res, next) => {
 });
 
 languageRouter.get('/:id', async (req, res, next) => {
-  res.json('ok')
+  const languageId = req.params.id;
+  try {
+    const words = await LanguageService.getLanguageWords(
+      req.app.get('db'),
+      languageId
+    );
+    const languageMatch = req.language.filter(language => language.id.toString() === languageId.toString())[0]
+    res.json({words: words, language: languageMatch});
+    next();
+  } catch (error) {
+    next(error);
+  }
+
 });
 
 languageRouter.post('/:id', async (req, res, next) => {
@@ -72,20 +86,55 @@ languageRouter.delete('/:id', async (req, res, next) => {
   res.json('ok');
 });
 
-languageRouter.get('/:id/word/:wordId', async (req, res, next) => {
+languageRouter.get('/word/:wordId', async (req, res, next) => {
   res.json('ok');
 });
 
-languageRouter.post('/:id/word/:wordId', async (req, res, next) => {
-  res.json('ok');
+languageRouter.post('/:id/word/', bodyParser, async (req, res, next) => {
+
+  try {
+  const languageId = req.params.id
+  const newWord = req.body
+    const addNewWord = await LanguageService.addNewWord(
+      req.app.get('db'),
+      languageId,
+      newWord
+    );
+    res.json({message: 'New word has been created', newWord: addNewWord}).status(204);
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
-languageRouter.put('/:id/word/:wordId', async (req, res, next) => {
-  res.json('ok');
+languageRouter.put('/word/:wordId', bodyParser, async (req, res, next) => {
+  try {
+    const wordId = req.params.wordId;
+    const { original, translation } = req.body;
+    const updateWord = await LanguageService.updateWord(
+      req.app.get('db'),
+      wordId,
+      {original: original, translation: translation}
+    );
+    res.json(`The word with the id ${wordId} has been updated`).status(204);
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
-languageRouter.delete('/:id/word/:wordId', async (req, res, next) => {
-  res.json('ok');
+languageRouter.delete('/word/:wordId', async (req, res, next) => {
+  try {
+    const wordId = req.params.wordId;
+     const deleteWord = await LanguageService.deleteWord(
+       req.app.get('db'),
+       wordId
+     );
+     res.json(`The word with the id ${wordId} has been deleted`).res.status(204);
+     next();
+   } catch (error) {
+     next(error);
+   }
 });
 
 languageRouter.get('/head', async (req, res, next) => {
