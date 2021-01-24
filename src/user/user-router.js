@@ -49,8 +49,8 @@ userRouter
       };
 
       const user = await UserService.insertUser(req.app.get('db'), newUser);
-
-      await UserService.populateUserWords(req.app.get('db'), user.id);
+      // when a user signs up this populates the french language for them right away. 
+      await UserService.populateUserWordsAtSignup(req.app.get('db'), user.id, 1);
 
       res
         .status(201)

@@ -45,8 +45,24 @@ languageRouter.get('/user', async (req, res, next) => {
 
 languageRouter.get('/', async (req, res, next) => {
   try {
-    const languages = await LanguageService.getLanguages(
-      req.app.get('db')
+    const languages = await LanguageService.getLanguages(req.app.get('db'));
+
+    res.json({
+      language: languages,
+    });
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+languageRouter.post('/', bodyParser, async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    const languages = await LanguageService.addNewLanguage(
+      req.app.get('db'),
+      name, 
+      req.user.id
     );
 
     res.json({
@@ -65,25 +81,54 @@ languageRouter.get('/:id', async (req, res, next) => {
       req.app.get('db'),
       languageId
     );
-    const languageMatch = req.language.filter(language => language.id.toString() === languageId.toString())[0]
-    res.json({words: words, language: languageMatch});
+    const languageMatch = req.language.filter(
+      (language) => language.id.toString() === languageId.toString()
+    )[0];
+    res.json({ words: words, language: languageMatch });
     next();
   } catch (error) {
     next(error);
   }
-
 });
 
 languageRouter.post('/:id', async (req, res, next) => {
   res.json('ok');
 });
 
-languageRouter.put('/:id', async (req, res, next) => {
+languageRouter.put('/:id', bodyParser, async (req, res, next) => {
   res.json('ok');
 });
 
+languageRouter.put('/:id/title', bodyParser, async (req, res, next) => {
+  try {
+    const languageId = req.params.id;
+    const { name } = req.body;
+    const updateLanguageTitle = await LanguageService.updateLanguageTitle(
+      req.app.get('db'),
+      languageId,
+      { name: name }
+    );
+    res.json({ message: 'title has been updated', name: name }).status(204);
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
 languageRouter.delete('/:id', async (req, res, next) => {
-  res.json('ok');
+  try {
+    const languageId = req.params.id;
+    const deleteLanguage = await LanguageService.deleteLanguage(
+      req.app.get('db'),
+      languageId
+    );
+    res
+      .json({ message: 'language deleted', language: deleteLanguage })
+      .status(204);
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 languageRouter.get('/word/:wordId', async (req, res, next) => {
@@ -91,16 +136,17 @@ languageRouter.get('/word/:wordId', async (req, res, next) => {
 });
 
 languageRouter.post('/:id/word/', bodyParser, async (req, res, next) => {
-
   try {
-  const languageId = req.params.id
-  const newWord = req.body
+    const languageId = req.params.id;
+    const newWord = req.body;
     const addNewWord = await LanguageService.addNewWord(
       req.app.get('db'),
       languageId,
       newWord
     );
-    res.json({message: 'New word has been created', newWord: addNewWord}).status(204);
+    res
+      .json({ message: 'New word has been created', newWord: addNewWord })
+      .status(204);
     next();
   } catch (error) {
     next(error);
@@ -114,7 +160,7 @@ languageRouter.put('/word/:wordId', bodyParser, async (req, res, next) => {
     const updateWord = await LanguageService.updateWord(
       req.app.get('db'),
       wordId,
-      {original: original, translation: translation}
+      { original: original, translation: translation }
     );
     res.json(`The word with the id ${wordId} has been updated`).status(204);
     next();
@@ -126,24 +172,24 @@ languageRouter.put('/word/:wordId', bodyParser, async (req, res, next) => {
 languageRouter.delete('/word/:wordId', async (req, res, next) => {
   try {
     const wordId = req.params.wordId;
-     const deleteWord = await LanguageService.deleteWord(
-       req.app.get('db'),
-       wordId
-     );
-     res.json(`The word with the id ${wordId} has been deleted`).res.status(204);
-     next();
-   } catch (error) {
-     next(error);
-   }
+    const deleteWord = await LanguageService.deleteWord(
+      req.app.get('db'),
+      wordId
+    );
+    res.json(`The word with the id ${wordId} has been deleted`).status(204);
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
-languageRouter.get('/head', async (req, res, next) => {
+languageRouter.get('/:id/head', async (req, res, next) => {
   try {
+    const languageId = req.params.id;
     const [nextWord] = await LanguageService.getNextWord(
       req.app.get('db'),
-      req.language.id
+      languageId
     );
-    console.log(req.language.id);
     res.json({
       nextWord: nextWord.original,
       totalScore: req.language.total_score,

@@ -26,11 +26,31 @@ const LanguageService = {
       )
       .returning('*');
   },
+  deleteLanguage(db, languageId) {
+    return db.from('language').where({ id: languageId }).del();
+  },
   deleteWord(db, wordId) {
     return db.from('word').where({ id: wordId }).del();
   },
   updateWord(db, wordId, updateObject) {
     return db.from('word').where({ id: wordId }).update(updateObject);
+  },
+  updateLanguageTitle(db, languageId, name) {
+    return db.from('language').where({ id: languageId }).update(name);
+  },
+  addNewLanguage(db, name, userId) {
+    console.log('this is the name from the add new language', name)
+    const newLanguage = {
+      name: name,
+      total_score: 0,
+      user_id: userId,
+      head: null
+    }
+    return db
+      .insert(newLanguage)
+      .into('language')
+      .returning('*')
+      .then(([language]) => language);
   },
   addNewWord: async (db, languageId, newWord) => {
     const [lastNext] = await db
@@ -64,7 +84,7 @@ const LanguageService = {
       //maxNext,
       //oldWordObject,
       // newWordObject,
-      insertNewWord,
+      insertNewWord
     );
 
     const seq = await db.from('word_id_seq').select('last_value').first();
@@ -125,7 +145,7 @@ const LanguageService = {
       .select('*')
       .where({ language_id });
   },
-
+  // What does the two functions below do?
   createLinkedList(words, head) {
     const headObj = words.find((word) => word.id === head);
     const headIndex = words.indexOf(headObj);

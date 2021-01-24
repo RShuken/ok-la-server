@@ -12,7 +12,8 @@
     "deploy": "git push heroku master",
     "migrate-test": "env NODE_ENV=test npm run migrate",
     "migrate:production": "heroku run npm run migrate",
-    "postdeploy": "npm run migrate:production"
+    "postdeploy": "npm run migrate:production", 
+    "re-migrate": "npm run migrate 0 && npm run migrate && psql -U postgres -d spaced-repetition -f ./seeds/seed.tables.sql && npm run dev"
   },
   "keywords": [],
   "author": "Ryan",

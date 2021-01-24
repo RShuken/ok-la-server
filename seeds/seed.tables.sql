@@ -23,7 +23,7 @@ VALUES
 
 INSERT INTO "language" ("id", "name", "user_id")
 VALUES
-  (1, 'French', 1), (2, 'French2', 1);
+  (1, 'French', 1), (2, 'Latin', 1);
 
 INSERT INTO "word" ("id", "language_id", "original", "translation", "next")
 VALUES
@@ -34,8 +34,17 @@ VALUES
   (5, 1, 'francais', 'french', 6),
   (6, 1, 'oui', 'yes', 7),
   (7, 1, 'chien', 'dog', 8),
-  (8, 1, 'chat', 'cat', null);
+  (8, 1, 'chat', 'cat', null),
+  (9, 2, 'amour', 'love', 10),
+  (10, 2, 'bonjour', 'hello', 11),
+  (11, 2, 'bonheur', 'happiness', 12),
+  (12, 2, 'sourire', 'smile', 13),
+  (13, 2, 'francais', 'french', 14),
+  (14, 2, 'oui', 'yes', 15),
+  (15, 2, 'chien', 'dog', 16),
+  (16, 2, 'chat', 'cat', null);;
 
+-- this might be an issue, need to check with Ari - 
 UPDATE "language" SET head = 1 WHERE id = 1;
 
 -- because we explicitly set the id fields
