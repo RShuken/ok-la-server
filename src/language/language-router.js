@@ -202,8 +202,12 @@ languageRouter.get('/:id/head', async (req, res, next) => {
   }
 });
 
-languageRouter.post('/guess', bodyParser, async (req, res, next) => {
+languageRouter.post('/:id/guess', bodyParser, async (req, res, next) => {
+  const languageId = req.params.id;
+  // need to make this a query that gets the real score of the languageId. 
+  const totalScore = 10
   const guess = req.body.guess;
+  //console.log('this is the guess and the language id', guess, languageId)
   if (!guess) {
     res.status(400).json({
       error: `Missing 'guess' in request body`,
@@ -212,16 +216,16 @@ languageRouter.post('/guess', bodyParser, async (req, res, next) => {
   try {
     let words = await LanguageService.getLanguageWords(
       req.app.get('db'),
-      req.language.id
+      languageId
     );
     const [{ head }] = await LanguageService.getLanguageHead(
       req.app.get('db'),
-      req.language.id
+      languageId
     );
     let list = LanguageService.createLinkedList(words, head);
     let [checkNextWord] = await LanguageService.checkGuess(
       req.app.get('db'),
-      req.language.id
+      languageId
     );
     if (checkNextWord.translation === guess) {
       let newMemVal = list.head.value.memory_value * 2;
@@ -253,12 +257,12 @@ languageRouter.post('/guess', bodyParser, async (req, res, next) => {
       await LanguageService.updateWordsTable(
         req.app.get('db'),
         toArray(list),
-        req.language.id,
-        req.language.total_score
+        languageId,
+        totalScore
       );
       res.json({
         nextWord: list.head.value.original,
-        totalScore: req.language.total_score,
+        totalScore: totalScore,
         wordCorrectCount: list.head.value.correct_count,
         wordIncorrectCount: list.head.value.incorrect_count,
         answer: temp.value.translation,
@@ -285,12 +289,12 @@ languageRouter.post('/guess', bodyParser, async (req, res, next) => {
       await LanguageService.updateWordsTable(
         req.app.get('db'),
         toArray(list),
-        req.language.id,
-        req.language.total_score
+        languageId,
+        totalScore
       );
       res.json({
         nextWord: list.head.value.original,
-        totalScore: req.language.total_score,
+        totalScore: totalScore,
         wordCorrectCount: list.head.value.correct_count,
         wordIncorrectCount: list.head.value.incorrect_count,
         answer: temp.value.translation,
