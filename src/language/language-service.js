@@ -15,16 +15,20 @@ const LanguageService = {
       .returning('*');
   },
   getLanguages(db) {
-    return db
-      .from('language')
-      .select(
-        'language.id',
-        'language.name',
-        'language.user_id',
-        'language.head',
-        'language.total_score'
-      )
-      .returning('*');
+    return (
+      db
+        .from('language')
+        // once I add the new colum this will return all public decks, make the is_public default to false
+        //.where({is_public: true })
+        .select(
+          'language.id',
+          'language.name',
+          'language.user_id',
+          'language.head',
+          'language.total_score'
+        )
+        .returning('*')
+    );
   },
   deleteLanguage(db, languageId) {
     return db.from('language').where({ id: languageId }).del();
@@ -39,13 +43,12 @@ const LanguageService = {
     return db.from('language').where({ id: languageId }).update(name);
   },
   addNewLanguage(db, name, userId) {
-    console.log('this is the name from the add new language', name)
     const newLanguage = {
       name: name,
       total_score: 0,
       user_id: userId,
-      head: null
-    }
+      head: null,
+    };
     return db
       .insert(newLanguage)
       .into('language')
@@ -78,25 +81,29 @@ const LanguageService = {
       .returning('*')
       .then(([word]) => word);
 
-    console.log(
-      'this is the value of lastNext and MaxNext and oldWordObject and NewWordObject and now insertNewWord',
-      //lastNext
-      //maxNext,
-      //oldWordObject,
-      // newWordObject,
-      insertNewWord
-    );
+
 
     const seq = await db.from('word_id_seq').select('last_value').first();
-    console.log('this is the seq value', seq);
     const oldWordObject = {
       next: seq.last_value,
     };
 
-    const UpdateOldWordNextValue = await db
-      .from('word')
-      .where({ id: lastNext.id })
-      .update(oldWordObject);
+    const [languageObject] = await db
+      .from('language')
+      .where({ id: languageId })
+      .returning('*');
+
+    if (languageObject.head !== null) {
+      const UpdateOldWordNextValue = await db
+        .from('word')
+        .where({ id: lastNext.id })
+        .update(oldWordObject);
+    } else {
+      const insertNewHead = await db
+        .from('language')
+        .where({ id: languageId })
+        .update({ head: insertNewWord.id});
+    }
 
     return insertNewWord;
   },
