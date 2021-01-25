@@ -155,7 +155,7 @@ languageRouter.post('/:id/word/', bodyParser, async (req, res, next) => {
       newWord
     );
     res
-      .status(202)
+      .status(201)
       .json({ message: 'New word has been created', newWord: addNewWord });
     next();
   } catch (error) {
@@ -217,15 +217,7 @@ languageRouter.post('/:id/guess', bodyParser, async (req, res, next) => {
   const [languageObj] = req.languages.filter(
     (lang) => lang.id.toString() == languageId.toString()
   );
-  // need to make this a query that gets the real score of the languageId.
-  console.log(
-    'this is the total score value and languageObj, req.langauge, and languageId ',
-    languageObj,
-    req.languages,
-    languageId
-  );
   const guess = req.body.guess;
-  //console.log('this is the guess and the language id', guess, languageId)
   if (!guess) {
     res.status(400).json({
       error: `Missing 'guess' in request body`,
@@ -314,7 +306,7 @@ languageRouter.post('/:id/guess', bodyParser, async (req, res, next) => {
         languageId,
         languageObj.total_score
       );
-      res.json({
+      res.send(202).json({
         nextWord: list.head.value.original,
         totalScore: languageObj.total_score,
         wordCorrectCount: list.head.value.correct_count,

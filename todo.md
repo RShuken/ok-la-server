@@ -162,7 +162,7 @@ Solutions:
 # Testing endpoints todo: 
 
 `template`
-Endpoint: 
+Endpoint: ``
 Type: 
 Requires: 
 Returns: 
@@ -180,12 +180,49 @@ Returns: 202
 Endpoint: `api/language/:id/word`
 Type: POST
 Requires: { original: word, translation: word}
-Returns: 202
+Returns: 201
 
-Endpoint: `api/language/word/:wordId
+Endpoint: `api/language/word/:wordId`
 Type: PUT
 Requires:  { original: word, translation: word}
 Returns: 202
+
+Endpoint: `api/language/word/:wordId`
+Type: DELETE
+Requires: nothing
+Returns: 202
+
+Endpoint: `api/language/:id/head`
+Type: GET
+Requires: nothing
+Returns: {
+      nextWord: nextWord.original,
+      totalScore: req.languages.total_score,
+      wordCorrectCount: nextWord.correct_count,
+      wordIncorrectCount: nextWord.incorrect_count,
+    }, 200
+
+Endpoint: `api/language/:id/guess`
+Type: POST
+Requires: { guess: guess }
+Returns: 202, {
+        nextWord: list.head.value.original,
+        totalScore: languageObj.total_score,
+        wordCorrectCount: list.head.value.correct_count,
+        wordIncorrectCount: list.head.value.incorrect_count,
+        answer: temp.value.translation,
+        isCorrect: false,
+      }
+
+Endpoint: 
+Type: 
+Requires: 
+Returns: 
+
+Endpoint: 
+Type: 
+Requires: 
+Returns: 
 
 Endpoint: 
 Type: 
