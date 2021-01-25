@@ -86,14 +86,14 @@ languageRouter.get('/:id', async (req, res, next) => {
     const languageMatch = req.languages.filter(
       (language) => language.id.toString() === languageId.toString()
     )[0];
-    res.json({ words: words, language: languageMatch }).status(200);
+    res.json({ words: words, language: languageMatch });
     next();
   } catch (error) {
     next(error);
   }
 });
 
-// this updates the language table to allow public access to decks
+// this updates the language table to allow public access to decks i still have an issue with this one
 languageRouter.put('/:id/access', bodyParser, async (req, res, next) => {
   try {
     const languageId = req.params.id;
@@ -136,9 +136,7 @@ languageRouter.delete('/:id', async (req, res, next) => {
       req.app.get('db'),
       languageId
     );
-    res
-      .send(202)
-      .json({ message: 'language deleted', language: deleteLanguage });
+    res.json(`The language with the id ${languageId} has been deleted`);
     next();
   } catch (error) {
     next(error);
@@ -306,7 +304,7 @@ languageRouter.post('/:id/guess', bodyParser, async (req, res, next) => {
         languageId,
         languageObj.total_score
       );
-      res.send(202).json({
+      res.status(202).json({
         nextWord: list.head.value.original,
         totalScore: languageObj.total_score,
         wordCorrectCount: list.head.value.correct_count,

@@ -143,7 +143,7 @@ Solutions:
 
 # New tickets
 
-# Issue:  Add a make public click box that changes the langauge table value of is_public to true of false.  NOT DONE FULLY - router and services done, issue with client value not working located in  languageDeckDashboard
+# Issue:  DONE
 Location: language router / langauge services and client side, user deck card.
 User Action: user needs to be able to click a small box to toggle is public
 Fetch: /language/:id PUT
@@ -151,7 +151,7 @@ Requires:
 Returns: 
 Solutions: make fetch request, and service object then wire up. 
 
-# Issue:  Server endpoint testing happy and sad paths
+# Issue: Need to check to make sure I have unhappy paths
 Location: 
 User Action: 
 Fetch: 
@@ -166,32 +166,39 @@ Endpoint: ``
 Type: 
 Requires: 
 Returns: 
+---------------------------------
 
+Status: `DONE`
 Endpoint: `api/language/:id/title`
 Type: PUT
 Requires: { name: name }
 Returns: 202 ok
 
+Status: `DONE`
 Endpoint: `api/language/:id`
 Type: DELETE
 Requires: nothing
-Returns: 202
+Returns: 200
 
+Status: `DONE`
 Endpoint: `api/language/:id/word`
 Type: POST
 Requires: { original: word, translation: word}
 Returns: 201
 
+Status: `DONE`
 Endpoint: `api/language/word/:wordId`
 Type: PUT
 Requires:  { original: word, translation: word}
 Returns: 202
 
+Status: `DONE`
 Endpoint: `api/language/word/:wordId`
 Type: DELETE
 Requires: nothing
-Returns: 202
+Returns: 200
 
+Status: `DONE`
 Endpoint: `api/language/:id/head`
 Type: GET
 Requires: nothing
@@ -202,6 +209,7 @@ Returns: {
       wordIncorrectCount: nextWord.incorrect_count,
     }, 200
 
+Status: `DONE`
 Endpoint: `api/language/:id/guess`
 Type: POST
 Requires: { guess: guess }
@@ -214,22 +222,3 @@ Returns: 202, {
         isCorrect: false,
       }
 
-Endpoint: 
-Type: 
-Requires: 
-Returns: 
-
-Endpoint: 
-Type: 
-Requires: 
-Returns: 
-
-Endpoint: 
-Type: 
-Requires: 
-Returns: 
-
-Endpoint: 
-Type: 
-Requires: 
-Returns: 
