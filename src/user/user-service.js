@@ -142,10 +142,7 @@ const UserService = {
         .where({ id: language_id })
         .select('name');
 
-        console.log(
-          'this is the name of the new data base',
-          languageNameNew[0].name
-        );
+      console.log('this is the language obj',languageNameNew)
       const [languageId] = await trx
         .into('language')
         .insert([{ name: languageNameNew[0].name, user_id }], ['id']);

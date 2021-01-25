@@ -47,9 +47,11 @@ languageRouter.get('/', async (req, res, next) => {
   try {
     const languages = await LanguageService.getLanguages(req.app.get('db'));
 
-    res.json({
-      language: languages,
-    });
+    res
+      .json({
+        language: languages,
+      })
+      .status(200);
     next();
   } catch (error) {
     next(error);
@@ -84,33 +86,31 @@ languageRouter.get('/:id', async (req, res, next) => {
     const languageMatch = req.languages.filter(
       (language) => language.id.toString() === languageId.toString()
     )[0];
-    res.json({ words: words, language: languageMatch });
+    res.json({ words: words, language: languageMatch }).status(200);
     next();
   } catch (error) {
     next(error);
   }
 });
 
-languageRouter.post('/:id', async (req, res, next) => {
-  res.json('ok');
-});
-
 // this updates the language table to allow public access to decks
 languageRouter.put('/:id/access', bodyParser, async (req, res, next) => {
-   try {
-     const languageId = req.params.id;
-     const { access } = req.body;
-     console.log('this is the value of access', access)
-     const updateLanguageTitle = await LanguageService.updateLanguageAccess(
-       req.app.get('db'),
-       languageId,
-       { is_public: access }
-     );
-     res.json({ message: 'access status has been updated', access: access }).status(204);
-     next();
-   } catch (error) {
-     next(error);
-   }
+  try {
+    const languageId = req.params.id;
+    const { access } = req.body;
+    console.log('this is the value of access', access);
+    const updateLanguageTitle = await LanguageService.updateLanguageAccess(
+      req.app.get('db'),
+      languageId,
+      { is_public: access }
+    );
+    res
+      .status(200)
+      .json({ message: 'access status has been updated', access: access });
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 languageRouter.put('/:id/title', bodyParser, async (req, res, next) => {
@@ -122,7 +122,7 @@ languageRouter.put('/:id/title', bodyParser, async (req, res, next) => {
       languageId,
       { name: name }
     );
-    res.json({ message: 'title has been updated', name: name }).status(204);
+    res.status(202).json({ message: 'title has been updated', name: name });
     next();
   } catch (error) {
     next(error);
@@ -137,16 +137,12 @@ languageRouter.delete('/:id', async (req, res, next) => {
       languageId
     );
     res
-      .json({ message: 'language deleted', language: deleteLanguage })
-      .status(204);
+      .send(202)
+      .json({ message: 'language deleted', language: deleteLanguage });
     next();
   } catch (error) {
     next(error);
   }
-});
-
-languageRouter.get('/word/:wordId', async (req, res, next) => {
-  res.json('ok');
 });
 
 languageRouter.post('/:id/word/', bodyParser, async (req, res, next) => {
@@ -159,8 +155,8 @@ languageRouter.post('/:id/word/', bodyParser, async (req, res, next) => {
       newWord
     );
     res
-      .json({ message: 'New word has been created', newWord: addNewWord })
-      .status(204);
+      .status(202)
+      .json({ message: 'New word has been created', newWord: addNewWord });
     next();
   } catch (error) {
     next(error);
@@ -176,7 +172,7 @@ languageRouter.put('/word/:wordId', bodyParser, async (req, res, next) => {
       wordId,
       { original: original, translation: translation }
     );
-    res.json(`The word with the id ${wordId} has been updated`).status(204);
+    res.status(202).json(`The word with the id ${wordId} has been updated`);
     next();
   } catch (error) {
     next(error);

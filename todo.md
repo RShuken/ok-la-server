@@ -159,26 +159,40 @@ Requires:
 Returns: 
 Solutions: 
 
-# Issue: Server testing for all CRUDS with fixtures
-Location: 
-User Action: 
-Fetch: 
-Requires: 
-Returns: 
-Solutions: 
+# Testing endpoints todo: 
 
-# Issue: 
-Location: 
-User Action: 
-Fetch: 
+`template`
+Endpoint: 
+Type: 
 Requires: 
 Returns: 
-Solutions: 
 
-# Issue: 
-Location: 
-User Action: 
-Fetch: 
+Endpoint: `api/language/:id/title`
+Type: PUT
+Requires: { name: name }
+Returns: 202 ok
+
+Endpoint: `api/language/:id`
+Type: DELETE
+Requires: nothing
+Returns: 202
+
+Endpoint: `api/language/:id/word`
+Type: POST
+Requires: { original: word, translation: word}
+Returns: 202
+
+Endpoint: `api/language/word/:wordId
+Type: PUT
+Requires:  { original: word, translation: word}
+Returns: 202
+
+Endpoint: 
+Type: 
 Requires: 
 Returns: 
-Solutions: 
+
+Endpoint: 
+Type: 
+Requires: 
+Returns: 

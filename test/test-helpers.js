@@ -44,7 +44,7 @@ function makeLanguagesAndWords(user) {
     {
       id: 1,
       name: 'Test language 1',
-      user_id: user.id,
+      user_id: user.id, is_public: true
     },
   ]
 
