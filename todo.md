@@ -90,7 +90,7 @@ Solutions:
 
 # New To Do
 
-# Issue: When creating a new language the head value is null, then when adding a new card, the head value is still null
+# Issue: When creating a new language the head value is null, then when adding a new card, the head value is still null DONE
 Location: language-router / language-services
 User Action: after a user adds a new language a user adds the first word in the language.
 Fetch: `/language/:id/word` POST or `/language POST`
@@ -98,7 +98,7 @@ Requires:  Language name, user id
 Returns: the new language added. 
 Solutions: Every new language deck created will come with a default card that sets the head value. Have a function check when adding a new word if it's the first word being added, to then go back and set it's value to the head of the language. (this might be best)
 
-# Issue: front end crashes after adding the first word to a new language
+# Issue: front end crashes after adding the first word to a new language DONE
 Location: langaugeDeckDashboard.js
 User Action: after user adds first word to a new deck
 Fetch: `/language/:id/word` POST 
@@ -108,7 +108,7 @@ Solutions: maybe fix with component did update?
 
 These two might be related!!!!
 
-# Issue: Cannot read property 'id' of undefined at Object.addNewWord (C:\Users\ryans\Documents\Thinkful\server ok language learning\src\language\language-service.js:100:29) 
+# Issue: Cannot read property 'id' of undefined at Object.addNewWord (C:\Users\ryans\Documents\Thinkful\server ok language learning\src\language\language-service.js:100:29)   DONE
 Location:  language-service
 User Action: when adding the first card to a new deck. 
 Fetch: 
@@ -116,7 +116,7 @@ Requires:
 Returns: 
 Solutions: 
 
-# Issue: fix the total-score in the language-router, it's hard coded to 10 and is not updating from the real data call. 
+# Issue: fix the total-score in the language-router, it's hard coded to 10 and is not updating from the real data call. DONE
 Location: language-router and language-services
 User Action: when a user is guessing correct or incorrect answers the score is wrong in the /guess request
 Fetch: /guess PUT
@@ -124,7 +124,7 @@ Requires: the user guess,
 Returns: 
 Solutions: write a new database call to get the correct total score
 
-# Issue: No feedback for the user after they add a deck from the community, need a way to show that a deck is already part of a users library 
+# Issue: No feedback for the user after they add a deck from the community, need a way to show that a deck is already part of a users library  DONE 
 Location: 
 User Action: 
 Fetch: 
@@ -132,7 +132,7 @@ Requires:
 Returns: 
 Solutions: a front end solution that removes decks that have been clicked to be added. 
 
-# Issue: The language table needs a 'is_public' colum that is default to false, so after adding a new deck it does not further populate the community deck list over and over. 
+# Issue: The language table needs a 'is_public' colum that is default to false, so after adding a new deck it does not further populate the community deck list over and over.  DONE
 Location: 
 User Action: 
 Fetch: 

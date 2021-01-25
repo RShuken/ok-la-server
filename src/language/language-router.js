@@ -18,7 +18,7 @@ languageRouter.use(requireAuth).use(async (req, res, next) => {
         error: `You don't have any languages`,
       });
 
-    req.language = language;
+    req.languages = language;
     next();
   } catch (error) {
     next(error);
@@ -30,11 +30,11 @@ languageRouter.get('/user', async (req, res, next) => {
   try {
     const words = await LanguageService.getLanguageWords(
       req.app.get('db'),
-      req.language.id
+      req.languages.id
     );
 
     res.json({
-      language: req.language,
+      language: req.languages,
       words,
     });
     next();
@@ -61,7 +61,7 @@ languageRouter.post('/', bodyParser, async (req, res, next) => {
     const { name } = req.body;
     const languages = await LanguageService.addNewLanguage(
       req.app.get('db'),
-      name, 
+      name,
       req.user.id
     );
 
@@ -81,7 +81,7 @@ languageRouter.get('/:id', async (req, res, next) => {
       req.app.get('db'),
       languageId
     );
-    const languageMatch = req.language.filter(
+    const languageMatch = req.languages.filter(
       (language) => language.id.toString() === languageId.toString()
     )[0];
     res.json({ words: words, language: languageMatch });
@@ -192,7 +192,7 @@ languageRouter.get('/:id/head', async (req, res, next) => {
     );
     res.json({
       nextWord: nextWord.original,
-      totalScore: req.language.total_score,
+      totalScore: req.languages.total_score,
       wordCorrectCount: nextWord.correct_count,
       wordIncorrectCount: nextWord.incorrect_count,
     });
@@ -204,8 +204,16 @@ languageRouter.get('/:id/head', async (req, res, next) => {
 
 languageRouter.post('/:id/guess', bodyParser, async (req, res, next) => {
   const languageId = req.params.id;
-  // need to make this a query that gets the real score of the languageId. 
-  const totalScore = 10
+  const [languageObj] = req.languages.filter(
+    (lang) => lang.id.toString() == languageId.toString()
+  );
+  // need to make this a query that gets the real score of the languageId.
+  console.log(
+    'this is the total score value and languageObj, req.langauge, and languageId ',
+    languageObj,
+    req.languages,
+    languageId
+  );
   const guess = req.body.guess;
   //console.log('this is the guess and the language id', guess, languageId)
   if (!guess) {
@@ -253,16 +261,20 @@ languageRouter.post('/:id/guess', bodyParser, async (req, res, next) => {
         curr.value.next = temp.value.id;
         temp.value.next = temp.next.value.id;
       }
-      req.language.total_score++;
+      const newTotalScore = await LanguageService.updateTotalScore(
+        req.app.get('db'),
+        languageObj.id,
+        languageObj.total_score + 1
+      );
       await LanguageService.updateWordsTable(
         req.app.get('db'),
         toArray(list),
         languageId,
-        totalScore
+        languageObj.total_score + 1
       );
       res.json({
         nextWord: list.head.value.original,
-        totalScore: totalScore,
+        totalScore: languageObj.total_score,
         wordCorrectCount: list.head.value.correct_count,
         wordIncorrectCount: list.head.value.incorrect_count,
         answer: temp.value.translation,
@@ -290,11 +302,11 @@ languageRouter.post('/:id/guess', bodyParser, async (req, res, next) => {
         req.app.get('db'),
         toArray(list),
         languageId,
-        totalScore
+        languageObj.total_score
       );
       res.json({
         nextWord: list.head.value.original,
-        totalScore: totalScore,
+        totalScore: languageObj.total_score,
         wordCorrectCount: list.head.value.correct_count,
         wordIncorrectCount: list.head.value.incorrect_count,
         answer: temp.value.translation,

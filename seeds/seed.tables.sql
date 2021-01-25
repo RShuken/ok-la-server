@@ -21,9 +21,9 @@ VALUES
     '!1Testtest'
   );
 
-INSERT INTO "language" ("id", "name", "user_id")
+INSERT INTO "language" ("id", "name", "user_id", "is_public")
 VALUES
-  (1, 'French', 1), (2, 'Latin', 1);
+  (1, 'French', 1, 'true'), (2, 'Latin', 1, 'true');
 
 INSERT INTO "word" ("id", "language_id", "original", "translation", "next")
 VALUES

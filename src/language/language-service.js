@@ -15,20 +15,17 @@ const LanguageService = {
       .returning('*');
   },
   getLanguages(db) {
-    return (
-      db
-        .from('language')
-        // once I add the new colum this will return all public decks, make the is_public default to false
-        //.where({is_public: true })
-        .select(
-          'language.id',
-          'language.name',
-          'language.user_id',
-          'language.head',
-          'language.total_score'
-        )
-        .returning('*')
-    );
+    return db
+      .from('language')
+      .where({ is_public: true })
+      .select(
+        'language.id',
+        'language.name',
+        'language.user_id',
+        'language.head',
+        'language.total_score'
+      )
+      .returning('*');
   },
   deleteLanguage(db, languageId) {
     return db.from('language').where({ id: languageId }).del();
@@ -81,8 +78,6 @@ const LanguageService = {
       .returning('*')
       .then(([word]) => word);
 
-
-
     const seq = await db.from('word_id_seq').select('last_value').first();
     const oldWordObject = {
       next: seq.last_value,
@@ -102,7 +97,7 @@ const LanguageService = {
       const insertNewHead = await db
         .from('language')
         .where({ id: languageId })
-        .update({ head: insertNewWord.id});
+        .update({ head: insertNewWord.id });
     }
 
     return insertNewWord;
@@ -121,6 +116,21 @@ const LanguageService = {
         'incorrect_count'
       )
       .where({ language_id });
+  },
+  getTotalScore(db, language_id) {
+    return db
+      .from('language')
+      .select('total_score')
+      .where({ id: language_id });
+  },
+  updateTotalScore(db, language_id, totalScore) {
+    const newScore = totalScore + 1;
+    console.log('this is the new score in the updateTotalScore function', newScore, language_id)
+    return db
+      .from('language')
+      //.select('total_score')
+      .where({ id: language_id })
+      .update({ total_score: newScore})
   },
 
   getLanguageHead(db, language_id) {
