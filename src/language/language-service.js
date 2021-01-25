@@ -9,7 +9,8 @@ const LanguageService = {
         'language.name',
         'language.user_id',
         'language.head',
-        'language.total_score'
+        'language.total_score',
+        'language.is_public'
       )
       .where('language.user_id', user_id)
       .returning('*');
@@ -23,7 +24,8 @@ const LanguageService = {
         'language.name',
         'language.user_id',
         'language.head',
-        'language.total_score'
+        'language.total_score',
+        'language.is_public'
       )
       .returning('*');
   },
@@ -38,6 +40,9 @@ const LanguageService = {
   },
   updateLanguageTitle(db, languageId, name) {
     return db.from('language').where({ id: languageId }).update(name);
+  },
+  updateLanguageAccess(db, languageId, is_public) {
+    return db.from('language').where({ id: languageId }).update(is_public);
   },
   addNewLanguage(db, name, userId) {
     const newLanguage = {
@@ -118,19 +123,22 @@ const LanguageService = {
       .where({ language_id });
   },
   getTotalScore(db, language_id) {
-    return db
-      .from('language')
-      .select('total_score')
-      .where({ id: language_id });
+    return db.from('language').select('total_score').where({ id: language_id });
   },
   updateTotalScore(db, language_id, totalScore) {
     const newScore = totalScore + 1;
-    console.log('this is the new score in the updateTotalScore function', newScore, language_id)
-    return db
-      .from('language')
-      //.select('total_score')
-      .where({ id: language_id })
-      .update({ total_score: newScore})
+    console.log(
+      'this is the new score in the updateTotalScore function',
+      newScore,
+      language_id
+    );
+    return (
+      db
+        .from('language')
+        //.select('total_score')
+        .where({ id: language_id })
+        .update({ total_score: newScore })
+    );
   },
 
   getLanguageHead(db, language_id) {

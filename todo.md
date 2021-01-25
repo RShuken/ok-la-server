@@ -140,3 +140,45 @@ Requires:
 Returns: 
 Solutions: 
 
+
+# New tickets
+
+# Issue:  Add a make public click box that changes the langauge table value of is_public to true of false.  NOT DONE FULLY - router and services done, issue with client value not working located in  languageDeckDashboard
+Location: language router / langauge services and client side, user deck card.
+User Action: user needs to be able to click a small box to toggle is public
+Fetch: /language/:id PUT
+Requires: 
+Returns: 
+Solutions: make fetch request, and service object then wire up. 
+
+# Issue:  Server endpoint testing happy and sad paths
+Location: 
+User Action: 
+Fetch: 
+Requires: 
+Returns: 
+Solutions: 
+
+# Issue: Server testing for all CRUDS with fixtures
+Location: 
+User Action: 
+Fetch: 
+Requires: 
+Returns: 
+Solutions: 
+
+# Issue: 
+Location: 
+User Action: 
+Fetch: 
+Requires: 
+Returns: 
+Solutions: 
+
+# Issue: 
+Location: 
+User Action: 
+Fetch: 
+Requires: 
+Returns: 
+Solutions: 

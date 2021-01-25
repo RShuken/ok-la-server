@@ -95,8 +95,22 @@ languageRouter.post('/:id', async (req, res, next) => {
   res.json('ok');
 });
 
-languageRouter.put('/:id', bodyParser, async (req, res, next) => {
-  res.json('ok');
+// this updates the language table to allow public access to decks
+languageRouter.put('/:id/access', bodyParser, async (req, res, next) => {
+   try {
+     const languageId = req.params.id;
+     const { access } = req.body;
+     console.log('this is the value of access', access)
+     const updateLanguageTitle = await LanguageService.updateLanguageAccess(
+       req.app.get('db'),
+       languageId,
+       { is_public: access }
+     );
+     res.json({ message: 'access status has been updated', access: access }).status(204);
+     next();
+   } catch (error) {
+     next(error);
+   }
 });
 
 languageRouter.put('/:id/title', bodyParser, async (req, res, next) => {
