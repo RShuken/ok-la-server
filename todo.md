@@ -222,3 +222,7 @@ Returns: 202, {
         isCorrect: false,
       }
 
+
+# Style to do
+
+-import google fonts 'lato' from google and fontface
