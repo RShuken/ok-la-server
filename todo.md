@@ -227,14 +227,25 @@ Returns: 202, {
 
 # Wave Errors
 
-Error: `Contrast error or an empty button` 
+Error: `Contrast error or an empty button`  DONE 
 Location:  userDeck.js
 
-Error: `no script element is present`
+Error: `no script element is present` DONE 
 Location: index.js
 
-Error: ``
-Location: 
+Error: `LanguageDeckDashboard.js:38 GET http://localhost:8000/api/language/undefined 500 (Internal Server Error` DONE
+
+Issue: 320px on learning page style fix  DONE
+# To Do :
+
+1. Client side smoke test DONE
+2. Finish server side endpoint test
+3. Readme for server
+4. Readme for Client
+5. landing page for client 
+6. deploy client to vercel
+7. deploy server to heroku
+8. update github about section for each
 
 
 # Final Requirements 
