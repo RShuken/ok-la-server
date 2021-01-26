@@ -88,30 +88,22 @@ const UserService = {
   populateUserWordsByLanguageId(db, user_id, language_id) {
     return db.transaction(async (trx) => {
       // this should be an array of object that represents a join between the language and word tables, that contains all words associated with a language id.
-      console.log(
-        'this is the user id and the languageId',
-        user_id,
-        language_id
-      );
       const languageNameNew = await trx
         .into('language')
         .where({ id: language_id })
         .select('name');
 
-      console.log(' this is the language name', languageNameNew);
 
       const [languageId] = await trx
         .into('language')
         .insert([{ name: languageNameNew[0].name, user_id }], ['id']);
 
-      console.log(' this is the languageId', languageId);
 
       const languageWordArray = await trx
         .from('word')
         .where({ language_id: language_id })
         .select('original', 'translation', 'next');
 
-      console.log('this is the languageWordArray', languageWordArray);
 
       const seq = await db.from('word_id_seq').select('last_value').first();
 
@@ -124,11 +116,9 @@ const UserService = {
         })
       );
 
-      console.log('this is the map over words array', mapOverWords);
       const [languageHeadId] = await trx
         .into('word')
         .insert(mapOverWords, 'id');
-      console.log('this is the languageHeadId', languageHeadId);
 
       await trx('language').where({ id: languageId.id }).update({
         head: languageHeadId,
@@ -142,7 +132,6 @@ const UserService = {
         .where({ id: language_id })
         .select('name');
 
-      console.log('this is the language obj',languageNameNew)
       const [languageId] = await trx
         .into('language')
         .insert([{ name: languageNameNew[0].name, user_id }], ['id']);

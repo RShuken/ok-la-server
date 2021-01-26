@@ -127,11 +127,6 @@ const LanguageService = {
   },
   updateTotalScore(db, language_id, totalScore) {
     const newScore = totalScore + 1;
-    console.log(
-      'this is the new score in the updateTotalScore function',
-      newScore,
-      language_id
-    );
     return (
       db
         .from('language')

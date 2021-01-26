@@ -98,7 +98,6 @@ languageRouter.put('/:id/access', bodyParser, async (req, res, next) => {
   try {
     const languageId = req.params.id;
     const { access } = req.body;
-    console.log('this is the value of access', access);
     const updateLanguageTitle = await LanguageService.updateLanguageAccess(
       req.app.get('db'),
       languageId,
