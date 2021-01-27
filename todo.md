@@ -239,13 +239,13 @@ Issue: 320px on learning page style fix  DONE
 # To Do :
 
 1. Client side smoke test DONE
-2. Finish server side endpoint test
+2. Finish server side endpoint test DONE
 3. Readme for server
 4. Readme for Client
-5. landing page for client 
-6. deploy client to vercel
-7. deploy server to heroku
-8. update github about section for each
+5. landing page for client  DONE 
+6. deploy client to vercel DONE
+7. deploy server to heroku DONE
+8. update github about section for each 
 
 
 # Final Requirements 

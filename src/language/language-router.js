@@ -25,7 +25,6 @@ languageRouter.use(requireAuth).use(async (req, res, next) => {
   }
 });
 
-// Question, does this return all of the languages for a user or just one?
 languageRouter.get('/user', async (req, res, next) => {
   try {
     const words = await LanguageService.getLanguageWords(
