@@ -4,9 +4,16 @@
 - [Server_Side_Repo](https://github.com/RShuken/ok-la-server)
 - [Client_Side_Repo](https://github.com/RShuken/ok-la-client)
 
+## Description
+
+This is a full stack project that showcases my ability to create custom data structures using linked list, React, Express and Node to create a language learning community platform.
+
+Users can add community language flashcard decks, create their own and share.
+
 ## API Documentation
 
 - [BASE_URL](https://ok-language-learning.herokuapp.com/api)
+**https://ok-language-learning.herokuapp.com/api**
 
 **Base Endpoints**
 ```
